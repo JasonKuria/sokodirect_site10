@@ -1,8 +1,19 @@
 from django.shortcuts import render
 
-
 def products(request):
-    return HttpResponse('Here is all our produce')
+    context = {
+        'page': 'Products',
+        'message': 'Welcome to SokoDirect — Fresh produce from Kenyan farmers'
+    }    
+    #return render(request, 'products/products.html')
+    return render(request, 'products/products.html', context)
+
+
 
 def single_product(request, pk):
-    return HttpResponse('Single produce item: ' + pk)
+    return render(request, 'products/single-product.html')
+
+
+
+
+    
