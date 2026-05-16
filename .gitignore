@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+envSokoDirect/
+db.sqlite3
+.vscode/
