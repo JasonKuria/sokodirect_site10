@@ -1,13 +1,17 @@
 {% extends 'main.html' %}
 {% block content %}
-    <h1>{{ page }}</h1>ddd
-    <p>{{ message }}</p>
+    <h1>All Produce Listings</h1>
+    <hr>
+    <ul>
+    {% for product in products %}
+        <li>
+            <a href="{% url 'single_product' product.id %}">>
+                <h3>{{ product.title }}</h3>
+            </a>
+                <p>{{ product.description }}</p>
+                <p>{{ product.price }}</p>
+                <p>{{ product.quantity }}</p>
+        </li>
+    {% endfor %}
+    </ul>
 {% endblock content %}
-
-
-
-
-
-
-
-

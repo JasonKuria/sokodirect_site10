@@ -1,6 +1,8 @@
 {% extends 'main.html' %}
-
 {% block content %}
-<h1>Single Product Listings</h1>
-<p>Fresh produce from Kenyan a farmer</p>
+    <h1>{{ product.title }}</h1>
+    <p>{{ product.description }}</p>
+    <p><strong>Price:</strong> {{ product.price }}</p>
+    <p><strong>Available:</strong> {{ product.quantity }}</p>
+    <br>
 {% endblock content %}
