@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<!-- Show farmer what they are about to delete -->
+<p>Are you sure you want to delete "{{ object }}"?</p>
+
+<!-- POST form needed to send the delete request -->
+<!-- We cannot delete with a GET request (link click) -->
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Confirm Delete">
+</form>
+
+<!-- Back link in case farmer changes their mind -->
+<a href="{% url 'products' %}">
+    <button>Go Back</button>
+</a>
+
+{% endblock content %}

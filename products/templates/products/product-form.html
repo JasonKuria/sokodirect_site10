@@ -3,16 +3,14 @@
 
 <h2>Add New Produce Listing</h2>
 
-<form method="POST">
+<!-- enctype needed for image/file uploads -->
+<form method="POST" enctype="multipart/form-data">
+
+    <!-- CSRF token — always required on POST forms -->
     {% csrf_token %}
 
-    {% for field in form %}
-        <div>
-            {{ field.label }}
-            {{ field }}
-            {{ field.errors }}
-        </div>
-    {% endfor %}
+    <!-- as_p wraps each field in paragraph tags (cleaner layout) -->
+    {{ form.as_p }}
 
     <input type="submit" value="Submit Listing">
 </form>

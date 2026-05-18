@@ -6,4 +6,12 @@ urlpatterns = [
 
     # New — form page for adding a produce listing
     path('create-product/', views.create_product, name='create-product'),
+
+    # Update needs the product ID in the URL so we know which to edit
+    path('update-product/<str:pk>/', views.update_product, name='update-product'),
+
+    # Delete also needs the product ID so we know which to delete
+    path('delete-product/<str:pk>/', views.delete_product, name='delete-product'),
+
+
 ]

@@ -14,16 +14,26 @@
     <th>Created</th>
     <th></th>
   </tr>
-  {% for product in products %}
-  <tr>
-    <td>{{ product.id }}</td>
-    <td>{{ product.title }}</td>
-    <td>{{ product.price }}</td>
-    <td>{{ product.vote_total }} votes</td>
-    <td>{{ product.vote_ratio }}% positive</td>
-    <td>{{ product.created }}</td>
-    <td><a href="{% url 'single-product' product.id %}">View</a></td>
-  </tr>
-  {% endfor %}
+    {% for product in products %}
+    <tr>
+        <td>{{ product.title }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.vote_total }} votes</td>
+        <td>{{ product.vote_ratio }}% positive</td>
+        <td>{{ product.created }}</td>
+
+        <!-- View link — goes to product detail page -->
+        <td>
+        <a href="{% url 'single-product' product.id %}">View</a>
+        </td>
+
+        <!-- Edit link — goes to update form pre-filled with this product -->
+        <td><a href="{% url 'update-product' product.id %}">Edit</a></td>
+
+        <!-- Delete link — goes to confirmation page -->
+        <td><a href="{% url 'delete-product' product.id %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+
 </table>
 {% endblock content %}
