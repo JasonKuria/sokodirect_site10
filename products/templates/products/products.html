@@ -1,17 +1,29 @@
 {% extends 'main.html' %}
+
 {% block content %}
-    <h1>All Produce Listings</h1>
-    <hr>
-    <ul>
-    {% for product in products %}
-        <li>
-            <a href="{% url 'single_product' product.id %}">>
-                <h3>{{ product.title }}</h3>
-            </a>
-                <p>{{ product.description }}</p>
-                <p>{{ product.price }}</p>
-                <p>{{ product.quantity }}</p>
-        </li>
-    {% endfor %}
-    </ul>
+
+<h1>All Produce Listings</h1>
+<table>
+
+  <tr>
+    <th>ID</th>
+    <th>Product</th>
+    <th>Price</th>
+    <th>Votes</th>
+    <th>Ratio</th>
+    <th>Created</th>
+    <th></th>
+  </tr>
+  {% for product in products %}
+  <tr>
+    <td>{{ product.id }}</td>
+    <td>{{ product.title }}</td>
+    <td>{{ product.price }}</td>
+    <td>{{ product.vote_total }} votes</td>
+    <td>{{ product.vote_ratio }}% positive</td>
+    <td>{{ product.created }}</td>
+    <td><a href="{% url 'single-product' product.id %}">View</a></td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock content %}

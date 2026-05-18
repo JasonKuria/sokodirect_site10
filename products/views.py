@@ -1,65 +1,25 @@
 from django.shortcuts import render
-
-products_list = [
-    {
-        'id': '1',
-        'title': 'Fresh Tomatoes',
-        'description': 'Farm fresh tomatoes from Kirinyaga County',
-        'price': 'KES 50 per kg',
-        'quantity': '500kg available',
-    },
-    {
-        'id': '2',
-        'title': 'Sukuma Wiki (Kale)',
-        'description': 'Organic kale grown in Limuru',
-        'price': 'KES 30 per bunch',
-        'quantity': '200 bunches available',
-    },
-    {
-        'id': '3',
-        'title': 'Irish Potatoes',
-        'description': 'Grade A potatoes from Nyandarua',
-        'price': 'KES 80 per kg',
-        'quantity': '1 tonne available',
-    },
-]
+from .models import Product  # import your model
 
 def products(request):
-    context = {
-        'page': 'Products',
-        'products': products_list    # pass list into template
-    }
+    # Replace the filler list with a real database query
+    products = Product.objects.all()
+
+    context = {'products': products}
     return render(request, 'products/products.html', context)
 
-
-
-#def products(request):
-#    context = {
-#        'page': 'Products',
-#        'message': 'Welcome to SokoDirect — Fresh produce from Kenyan farmers'
-#    }    
-    #return render(request, 'products/products.html')
-#    return render(request, 'products/products.html', context)
-
-
-
-#def single_product(request, pk):
-#    return render(request, 'products/single-product.html')
-
 def single_product(request, pk):
-    product_obj = None    # start with nothing found
+    # Get the specific product by its primary key from URL
+    product = Product.objects.get(id=pk)
 
-    # Search the list for product whose id matches URL pk
-    for i in products_list:
-        if i['id'] == pk:
-            product_obj = i    # found it — store it
-            break
+    # Get its categories (ManyToMany)
+    categories = product.categories.all()
+    # Get its reviews (children via reverse FK)
+    reviews = product.review_set.all()
 
-    context = {'product': product_obj}
+    context = {
+        'product': product,
+        'categories': categories,
+        'reviews': reviews,
+    }
     return render(request, 'products/single-product.html', context)
-
-
-
-
-
-    

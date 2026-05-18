@@ -1,8 +1,20 @@
 {% extends 'main.html' %}
 {% block content %}
-    <h1>{{ product.title }}</h1>
-    <p>{{ product.description }}</p>
-    <p><strong>Price:</strong> {{ product.price }}</p>
-    <p><strong>Available:</strong> {{ product.quantity }}</p>
-    <br>
+
+<h1>{{ product.title }}</h1>
+<p>{{ product.description }}</p>
+<p><strong>Price:</strong> {{ product.price }}</p>
+<p><strong>Available:</strong> {{ product.quantity_available }} {{ product.unit }}</p>
+<p><strong>County:</strong> {{ product.county }}</p>
+<p><strong>Votes:</strong> {{ product.vote_ratio }}% positive out of {{ product.vote_total }}</p>
+<hr>
+<h3>Categories</h3>
+{% for category in product.categories.all %}
+  <span style="border:1px solid gray;padding:2px 8px;">{{ category.name }}</span>
+{% endfor %}
+<hr>
+<h3>Reviews</h3>
+{% for review in reviews %}
+  <p>{{ review.value }} — {{ review.body }}</p>
+{% endfor %}
 {% endblock content %}
