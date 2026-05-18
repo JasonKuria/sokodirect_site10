@@ -22,7 +22,7 @@ def create_product(request):
     form = ProductForm()
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
+        form = ProductForm(request.POST, request.FILES) # ← add request.FILES
         if form.is_valid():
             form.save()
             return redirect('products')
@@ -37,7 +37,7 @@ def update_product(request, pk):
     form = ProductForm(instance=product)   # pre-fill with existing data
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES, instance=product)
+        form = ProductForm(request.POST, request.FILES, instance=product) # ← add request.FILES
         if form.is_valid():
             form.save()
             return redirect('products')

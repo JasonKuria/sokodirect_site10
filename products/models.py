@@ -91,9 +91,20 @@ class Product(models.Model):
     price = models.CharField(max_length=200, null=True, blank=True)
     quantity_available = models.CharField(max_length=200, null=True, blank=True)
     unit = models.CharField(max_length=50, null=True, blank=True)  # kg, bunch, piece
+
+    # Product image field
+    # null=True, blank=True - image is optional
+    # default= - shows this image if no image is uploaded
+    # upload_to= - where uploaded images are saved on the server
     featured_image = models.ImageField(
-        null=True, blank=True, upload_to='products/'
+        null=True, blank=True,
+        default='default.jpg',
+        upload_to='products/' # saves to media/products/
     )
+
+
+
+
     # Contact
     contact_link = models.CharField(max_length=2000, null=True, blank=True)
     farm_link = models.CharField(max_length=2000, null=True, blank=True)

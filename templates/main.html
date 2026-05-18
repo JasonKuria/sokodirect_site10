@@ -1,7 +1,11 @@
+{% load static %}  <!-- must be at the very top — loads the static tag -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>SokoDirect</title>
+
+    <!-- Connect CSS using static tag — not a hardcoded path -->
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}

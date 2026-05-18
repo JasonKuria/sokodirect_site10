@@ -1,8 +1,10 @@
-<h1>SokoDirect</h1>
+{% load static %}  <!-- required in EVERY file that uses -->
+
+<!-- Logo image using static tag -->
+<img src="{% static 'images/logo.svg' %}" alt="SokoDirect Logo">
 <hr>
 
-<!-- Add this link — uses URL name, not hardcoded path -->
+<!-- Navigation links -->
+<a href="{% url 'products' %}">Home</a>
+<a href="{% url 'create-product' %}">Add Produce Listing</a>
 
-<a href="{% url 'create-product' %}">
- Add Produce Listing
-</a>

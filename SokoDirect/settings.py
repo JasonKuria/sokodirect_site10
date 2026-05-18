@@ -122,4 +122,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+# URL prefix for static files in browser
+STATIC_URL = '/static/'
+
+# Tell Django which folder(s) contain our static files
+# Same concept as TEMPLATES DIRS — pointing to a folder
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+
+# MEDIA_ROOT - where Django saves user uploaded files on the server disk
+# All uploaded images go into a media/ folder in our project root
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# MEDIA_URL - the URL prefix browsers use to access uploaded files
+# e.g. /media/products/tomatoes.jpg
+MEDIA_URL = '/media/'
