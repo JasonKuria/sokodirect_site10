@@ -1,39 +1,70 @@
 {% extends 'main.html' %}
-
 {% block content %}
 
-<h1>All Produce Listings</h1>
-<table>
+  <!-- Main Section -->
+  <main class="projects">
+    <section class="hero-section text-center">
+      <div class="container container--narrow">
+        <div class="hero-section__box">
+          <h2>Search for <span>Farm Produce</span></h2>
+        </div>
 
-  <tr>
-    <th>ID</th>
-    <th>Product</th>
-    <th>Price</th>
-    <th>Votes</th>
-    <th>Ratio</th>
-    <th>Created</th>
-    <th></th>
-  </tr>
-    {% for product in products %}
-    <tr>
-        <td>{{ product.title }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.vote_total }} votes</td>
-        <td>{{ product.vote_ratio }}% positive</td>
-        <td>{{ product.created }}</td>
+        <div class="hero-section__search">
+          <form class="form" action="#" method="get">
+            <div class="form__field">
+              <label for="formInput#search">Search By Farmers Produce </label>
+              <input class="input input--text" id="formInput#search" type="text" name="text"
+                placeholder="Search by Farm Produce Title" />
+            </div>
 
-        <!-- View link — goes to product detail page -->
-        <td>
-        <a href="{% url 'single-product' product.id %}">View</a>
-        </td>
+            <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+          </form>
+        </div>
+      </div>
+    </section>
 
-        <!-- Edit link — goes to update form pre-filled with this product -->
-        <td><a href="{% url 'update-product' product.id %}">Edit</a></td>
+    <!-- Search Result: DevList -->
+    <section class="projectsList">
+      <div class="container">
+        <div class="grid grid--three">
 
-        <!-- Delete link — goes to confirmation page -->
-        <td><a href="{% url 'delete-product' product.id %}">Delete</a></td>
-    </tr>
-    {% endfor %}
+          {% for product in products %}
 
-</table>
+          <div class="column">
+            <div class="card project">
+              <a href="{% url 'single-product' product.id %}" class="project">
+                <img class="project__thumbnail" src="{{ product.featured_image.url }}" alt="product thumbnail" />
+                <div class="card__body">
+                  <h3 class="project__title">{{ product.title }}</h3>
+                  <p><a class="project__author" href="{% url 'single-product' product.id %}">By Dennis Ivanov</a></p>
+                  <p class="project--rating">
+                    <span style="font-weight: bold;">{{ product.vote_ratio }}% </span> Postitive Feedback 
+                    ({{product.vote_total}}) Vote{{product.vote_total|pluralize:"s"}}
+                  </p>
+
+                  <div class="project__tags">
+                    <!-- Categories (ManyToMany) -->
+                    {% for category in product.categories.all %}
+                    <span class="tag tag--pill tag--main">
+                      <small>{{ category.name }}</small>
+                    </span>
+                    {% endfor %}
+                  </div>
+
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          {% endfor %}
+
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+
+
 {% endblock content %}

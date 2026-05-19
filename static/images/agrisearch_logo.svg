@@ -1,0 +1,62 @@
+```svg
+<svg width="2048" height="529" viewBox="0 0 2048 529" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="2048" height="529" fill="#F4F4F4"/>
+
+  <!-- Text: agri -->
+  <text x="40" y="390"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="270"
+        font-weight="300"
+        fill="#D9D5F6">
+    agri
+  </text>
+
+  <!-- Text: search -->
+  <text x="900" y="390"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="270"
+        font-weight="300"
+        fill="#D9D5F6">
+    search
+  </text>
+
+  <!-- Magnifying glass -->
+  <circle cx="1280" cy="280" r="110"
+          stroke="#5A648C"
+          stroke-width="26"
+          fill="none"/>
+
+  <line x1="1350" y1="350" x2="1440" y2="440"
+        stroke="#5A648C"
+        stroke-width="36"
+        stroke-linecap="round"/>
+
+  <!-- Farmer silhouette -->
+  <g fill="#5A648C">
+    <!-- Hat -->
+    <path d="M1210 250
+             C1235 225, 1280 220, 1310 230
+             C1340 220, 1365 230, 1375 255
+             C1400 260, 1420 270, 1430 285
+             C1385 282, 1335 275, 1285 275
+             C1245 275, 1215 270, 1200 265
+             C1200 258, 1203 253, 1210 250Z"/>
+
+    <!-- Face -->
+    <path d="M1260 280
+             C1285 275, 1310 285, 1320 305
+             L1325 340
+             C1310 360, 1285 370, 1260 365
+             L1248 345
+             L1250 300Z"/>
+
+    <!-- Body -->
+    <path d="M1265 365
+             C1300 365, 1330 380, 1355 405
+             L1335 425
+             C1310 418, 1280 415, 1245 420
+             L1225 410
+             C1235 390, 1248 375, 1265 365Z"/>
+  </g>
+</svg>
+```

@@ -1,0 +1,79 @@
+<svg width="2048" height="529" viewBox="0 0 2048 529" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Background -->
+  <rect width="2048" height="529" fill="#F5F5F5"/>
+
+  <!-- AGRI text -->
+  <text x="40"
+        y="390"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="270"
+        font-weight="300"
+        fill="#DCD8F7">
+    agri
+  </text>
+
+  <!-- SEARCH text -->
+  <text x="1450"
+        y="390"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="270"
+        font-weight="300"
+        fill="#DCD8F7">
+    rch
+  </text>
+
+  <!-- Magnifying Glass Circle -->
+  <circle cx="1270"
+          cy="275"
+          r="110"
+          stroke="#5A648C"
+          stroke-width="26"
+          fill="none"/>
+
+  <!-- Handle -->
+  <line x1="1345"
+        y1="350"
+        x2="1440"
+        y2="445"
+        stroke="#5A648C"
+        stroke-width="38"
+        stroke-linecap="round"/>
+
+  <!-- Farmer Icon -->
+  <g fill="#5A648C">
+
+    <!-- Hat -->
+    <path d="
+      M1205 250
+      C1235 220, 1295 215, 1325 230
+      C1355 220, 1380 235, 1388 258
+      C1415 262, 1430 272, 1440 285
+      C1390 280, 1340 274, 1285 274
+      C1245 274, 1218 268, 1198 263
+      C1198 258, 1200 253, 1205 250
+      Z"/>
+
+    <!-- Face -->
+    <path d="
+      M1260 280
+      C1285 275, 1310 285, 1320 305
+      L1325 338
+      C1310 360, 1285 370, 1262 365
+      L1248 345
+      L1250 300
+      Z"/>
+
+    <!-- Body -->
+    <path d="
+      M1265 365
+      C1300 365, 1332 382, 1355 405
+      L1338 425
+      C1310 418, 1280 416, 1245 420
+      L1225 410
+      C1235 392, 1248 375, 1265 365
+      Z"/>
+
+  </g>
+
+</svg>
