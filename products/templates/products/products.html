@@ -6,7 +6,7 @@
     <section class="hero-section text-center">
       <div class="container container--narrow">
         <div class="hero-section__box">
-          <h2>Search for <span>Farm Produce</span></h2>
+          <h2 style="color: #3fca3f"  >Search for <span style="color: #3fca3f !important;">Farm Produce</span></h2>
         </div>
 
         <div class="hero-section__search">
@@ -36,7 +36,16 @@
                 <img class="project__thumbnail" src="{{ product.featured_image.url }}" alt="product thumbnail" />
                 <div class="card__body">
                   <h3 class="project__title">{{ product.title }}</h3>
-                  <p><a class="project__author" href="{% url 'single-product' product.id %}">By Dennis Ivanov</a></p>
+
+
+                  <!-- Real user(farmer) name — queries up from product to its owner profile -->
+                  <!-- product.owner = the Profile, product.owner.name = user(farmer's) name -->
+                  <p>
+                    <a class="project__author" href="{% url 'single-product' product.id %}">
+                      By {{product.owner.name}}
+                    </a>
+                  </p>
+
                   <p class="project--rating">
                     <span style="font-weight: bold;">{{ product.vote_ratio }}% </span> Postitive Feedback 
                     ({{product.vote_total}}) Vote{{product.vote_total|pluralize:"s"}}

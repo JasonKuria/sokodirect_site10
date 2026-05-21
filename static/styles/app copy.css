@@ -1,9 +1,6 @@
 :root {
-  /* --color-sub: #2d2d39; */
-  --color-sub: #0e2e8a;
-  --color-brand-green: #1E8A57; /* Add this line */
+  --color-sub: #2d2d39;
 }
-
 
 .btn--sub {
   background-color: var(--color-sub-light);
@@ -186,8 +183,7 @@ img {
 .hero-section__box > h2,
 .hero-section__box > h2 > span {
   font-size: 4rem;
-  /*color: var(--color-light);*/
-  color: var(--color-brand-green); /* Changed from var(--color-light) */  
+  color: var(--color-light);
   line-height: 1.3;
   text-transform: uppercase;
 }

@@ -6,7 +6,14 @@ from django.conf.urls.static import static         # builds URL for media files
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('products.urls')),
+
+    # Users app - empty string = homepage
+    # Visiting the root domain shows users(farmer) profiles
+    path('', include('users.urls')),
+
+    # Products app - now lives under /products/
+    # All product URLs are prefixed with products/
+    path('products/', include('products.urls')),
 ]
 
 # Append media URL route — tells Django how to serve uploaded files

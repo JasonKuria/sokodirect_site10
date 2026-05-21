@@ -1,9 +1,6 @@
 import uuid
 from django.db import models
-#from django.contrib.auth.models import User  # ← add this line
-from users.models import Profile # import Profile from the users app
-
-
+from django.contrib.auth.models import User  # ← add this line
 
 class County(models.Model):
     name = models.CharField(max_length=200)  # e.g. Nairobi, Mombasa, Nakuru
@@ -42,6 +39,41 @@ class Speciality(models.Model):
     
 
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE,  # delete profile if user deleted
+        null=True, blank=True
+    )
+    name = models.CharField(max_length=200, null=True, blank=True)
+    email = models.EmailField(max_length=500, null=True, blank=True)
+    username = models.CharField(max_length=200, null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    profile_image = models.ImageField(
+        null=True, blank=True,
+        upload_to='profiles/',       # saves to media/profiles/
+        default='profiles/default.jpg'
+    )
+    is_farmer = models.BooleanField(default=False)  # True=farmer, False=buyer
+    # Location
+    county = models.ForeignKey(
+        'County', on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
+    # Social/contact links
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    whatsapp_link = models.CharField(max_length=500, null=True, blank=True)
+    website = models.CharField(max_length=500, null=True, blank=True)
+    # Farmer specialities — ManyToMany
+    specialities = models.ManyToManyField('Speciality', blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True,
+                          primary_key=True, editable=False)
+    def __str__(self):
+        return str(self.username)
+
+
+
 class Product(models.Model):
     # Which user(farmer) listed this produce
     # SET_NULL: if farmer deletes account, keep the listing but clear owner
@@ -51,7 +83,7 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
         null=True, blank=True
     )
-
+    
     # Where the produce is from
     county = models.ForeignKey(
         County, on_delete=models.SET_NULL,
