@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<main class="auth my-xl">
+    <div class="card text-center">
+        <div class="card__body dev">
+            <h3>SokoDirect Platform Login</h3>
+            
+            <form action="{% url 'login' %}" method="POST" class="form">
+                {% csrf_token %}
+                
+                <div class="form__field">
+                    <label for="username">Username: </label>
+                    <input class="input input--text" id="username" type="text" name="username" placeholder="Enter your username" required />
+                </div>
+
+                <div class="form__field">
+                    <label for="password">Password: </label>
+                    <input class="input input--password" id="password" type="password" name="password" placeholder="Enter your secure password" required />
+                </div>
+
+                <input class="btn btn--sub btn--lg" type="submit" value="Secure Login" />
+            </form>
+            
+            <p>New to the marketplace? <a href="#">Create an Account</a></p>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}

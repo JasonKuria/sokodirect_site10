@@ -6,4 +6,8 @@ urlpatterns = [
     path('', views.profiles, name='profiles'),
 
     path('profile/<str:pk>/', views.user_Profile, name='user_profile'),
+
+    # Secure Session Routes
+    path('login/', views.loginUser, name='login'),
+    path('logout/', views.logoutUser, name='logout'),
 ]
