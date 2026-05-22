@@ -2,7 +2,14 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User # Django's built-in User model
 
+# import some receiver function 
+# to create profile automatically when a new user is created
+# the save method is called on the user model, 
+# and the receiver function will create a corresponding profile
+from django.db.models.signals import post_save, post_delete
 
+# using django decorators to connect the receiver function to the signal
+from django.dispatch import receiver
 
 
 class Profile(models.Model):
@@ -83,3 +90,35 @@ class Speciality(models.Model):
     def __str__(self):
         return self.name
 
+# this is the receiver function (profileUpdated)
+# that we are going to trigger when a new user is created
+# where we will parse some sender 
+# the sender is the model (User) that sends this signal and 
+# the instance is the actual user that was created
+#@receiver(post_save, sender=Profile)
+def CreateProfile(sender, instance, created, **kwargs):
+    if created: # only create profile if user is created, not updated
+        user = instance # the user that was created
+        profile = Profile.objects.create( # create a new profile with the following fields
+            user=user, # link the profile to the user
+            username=user.username, # copy username from user to profile for easy access
+            email=user.email, # copy email from user to profile for easy access
+            name=user.first_name # copy first name from user to profile for easy access
+        )
+        print('Profile created for user: ', profile)
+
+def deleteUser(sender, instance, **kwargs):
+    user = instance.user # get the user linked to the profile that is being deleted
+    user.delete() # delete the user from the User model
+    print('Deleting User....!')  
+
+# Every time a user is created, 
+# the CreateProfile function will be called to create a corresponding profile
+# this is a receiver (post_save) 
+# that listens for when a user is saved (created or updated)
+post_save.connect(CreateProfile, sender=User)    
+
+# When a profile is deleted 
+# we want to delete the corresponding user as well, 
+# from the User model
+post_delete.connect(deleteUser, sender=Profile) # When 
