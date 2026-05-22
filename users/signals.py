@@ -29,9 +29,15 @@ def CreateProfile(sender, instance, created, **kwargs):
         print('Profile created for user: ', profile)
 
 def deleteUser(sender, instance, **kwargs):
-    user = instance.user # get the user linked to the profile that is being deleted
-    user.delete() # delete the user from the User model
-    print('Deleting User....!')  
+    try:
+        user = instance.user
+        if user:
+            user.delete()
+            print('🗑️ SokoDirect Signal: Associated auth credentials safely pruned.')
+    except Exception:
+        # If the User was deleted first, the profile is cascade-deleted, 
+        # and instance.user will throw an error. We catch it here to prevent crashes.
+        print('💡 SokoDirect Signal: User was already deleted. Profile cascade complete.')
 
 # Every time a user is created, 
 # the CreateProfile function will be called to create a corresponding profile
