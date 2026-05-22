@@ -41,7 +41,7 @@
                   <!-- Real user(farmer) name — queries up from product to its owner profile -->
                   <!-- product.owner = the Profile, product.owner.name = user(farmer's) name -->
                   <p>
-                    <a class="project__author" href="{% url 'single-product' product.id %}">
+                    <a class="project__author" href="{% url 'user_profile' product.owner.id %}">
                       By {{product.owner.name}}
                     </a>
                   </p>

@@ -69,7 +69,7 @@ class Speciality(models.Model):
         on_delete=models.CASCADE,
         null=True, blank=True
     )
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(
