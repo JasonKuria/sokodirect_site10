@@ -4,8 +4,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import  User
 from .models import Profile
 from django.contrib import messages
+#from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
+
 
 def loginUser(request):
+    # Context variable to conditionally render the login form 
+    # in the shared login_register.html template
+    # what is page for? its used in the login_register.html template 
+    # to determine whether to display the login form or the registration form.
+    page = 'login' 
+
+
     # Authorization Restriction: Active users shouldn't see the login page
     if request.user.is_authenticated:
         return redirect('profiles')
@@ -42,6 +52,53 @@ def logoutUser(request):
     logout(request) # Destroys active backend and browser session cookies
     messages.info(request, "You have successfully logged out of your session.")
     return redirect('login')
+
+
+
+def registerUser(request):
+    # Security Check: Redirect active authenticated accounts away from registration screens
+    if request.user.is_authenticated:
+        return redirect('profiles')
+        
+    # Context variable to conditionally render the registration 
+    # form in the shared login_register.html template        
+    page = 'register' # This variable is used in the login_register.html template to determine whether to display the login form or the registration form.
+    form = CustomUserCreationForm()
+    
+    if request.method == 'POST': # When the registration form is submitted, the view processes the POST request to create a new user account.
+        # Bind submitted POST payloads to our customized registration schema class
+        form = CustomUserCreationForm(request.POST)
+        
+        if form.is_valid():
+            # Commit=False holds a local memory instance of the user before database insertion
+            # why we do this is because we want 
+            # to perform string normalization on the username field before saving it to the database.
+            user = form.save(commit=False)
+            
+            # String Normalization: Enforce strictly lowercase usernames to eliminate duplicate profile collision exploits
+            user.username = user.username.lower()
+            user.save() # Formally writes transaction block parameters to disk storage
+            
+            messages.success(
+                request, "Your SokoDirect farmer account was Created successfully!")
+            
+            # Seamless Onboarding: 
+            # Instantly authorize the session cookies without forcing a manual re-login stage
+            login(request, user)
+            return redirect('profiles')
+        else:
+            messages.error(
+                request, "An error occurred during account creation.")
+            
+    context = {'page': page, 'form': form}
+    return render(request, 'users/login_register.html', context)
+
+
+
+
+
+
+
 
 
 def profiles(request):
