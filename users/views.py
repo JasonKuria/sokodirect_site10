@@ -124,3 +124,28 @@ def user_Profile(request, pk):
     return render(request, 'users/user-profile.html', context)
 
 
+@login_required(login_url='login')
+def userAccount(request):
+    """
+    Renders the secure dashboard workspace for the currently logged-in user.
+    Extracts profile assets using the request session token to avoid exposing primary keys in the URL.
+    """
+    # Use the one-to-one relationship on the logged-in user to fetch their profile
+    profile = request.user.profile
+    
+    # Extract related skills and projects using reverse lookups
+    # Speciality with a description
+    #topSpeciality = profile.speciality_set.exclude(description__exact="")
+    # Speciality without a description
+    #otherSpeciality = profile.speciality_set.filter(description="")
+    specialities = profile.speciality_set.all()
+    products = profile.product_set.all()
+
+    context = {
+        'profile': profile,
+        'specialities': specialities,
+        'products': products
+    }
+    return render(request, 'users/account.html', context)
+
+

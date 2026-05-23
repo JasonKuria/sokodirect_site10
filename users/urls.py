@@ -11,4 +11,8 @@ urlpatterns = [
     path('login/', views.loginUser, name='login'),
     path('logout/', views.logoutUser, name='logout'),
     path('register/', views.registerUser, name='register'), # <--- Added sign-up route
+
+    # Secure Account Space Tracking Paths
+    path('account/', views.userAccount, name='account'), # <--- New User Account Route
+
 ]
