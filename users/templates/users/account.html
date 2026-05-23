@@ -41,8 +41,11 @@
             <p class="devInfo__about">{{profile.bio}}</p>
           </div>
           <div class="settings">
-            <h3 class="settings__title">Skills</h3>
-            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="#"><i class="im im-plus"></i> Add Skill</a>
+            <h3 class="settings__title">Skills/Specialities</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-speciality' %}">
+              <i class="im im-plus"></i> 
+              Add Skill
+            </a>
           </div>
 
           <table class="settings__table">
@@ -53,8 +56,8 @@
                 <p>{{speciality.description}}</p>
               </td>
               <td class="settings__tableActions">
-                <a class="tag tag--pill tag--main settings__btn" href="#"><i class="im im-edit"></i> Edit</a>
-                <a class="tag tag--pill tag--main settings__btn" href="#"><i class="im im-x-mark-circle-o"></i>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-speciality' speciality.id %}"><i class="im im-edit"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-speciality' speciality.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
                   Delete</a>
               </td>
             </tr>
@@ -85,7 +88,7 @@
               </td>
               <td class="settings__tableActions">
                 <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-product' product.id %}"><i class="im im-edit"></i> Edit</a>
-                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-product' product.id %}"><i class="im im-x-mark-circle-o"></i>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-product' product.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
                   Delete</a>
               </td>
             </tr>

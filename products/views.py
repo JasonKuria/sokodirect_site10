@@ -35,7 +35,7 @@ def create_product(request):
             product = form.save(commit=False)  # create product object but don't save to DB yet
             product.owner = profile  # set the owner to the logged-in user's profile
             form.save()
-            return redirect('products')
+            return redirect('account')
 
     context = {'form': form}
     return render(request, 'products/product-form.html', context)
@@ -54,7 +54,7 @@ def update_product(request, pk):
         form = ProductForm(request.POST, request.FILES, instance=product) # ← add request.FILES
         if form.is_valid():
             form.save()
-            return redirect('products')
+            return redirect('account')
 
     context = {'form': form}
     return render(request, 'products/product-form.html', context)
@@ -66,13 +66,13 @@ def delete_product(request, pk):
 
     # D — Delete: show confirmation on GET, delete on POST
     #product = Product.objects.get(id=pk)
-    product = profile.product.set.get(id=pk) # only allow deleting products owned by the logged-in user
+    product = profile.product_set.get(id=pk) # only allow deleting products owned by the logged-in user
 
     if request.method == 'POST':
         product.delete()
         return redirect('products')
 
     context = {'object': product}
-    return render(request, 'products/delete-template.html', context)
+    return render(request, 'delete-template.html', context)
 
 

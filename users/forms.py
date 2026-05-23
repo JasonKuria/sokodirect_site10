@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, Speciality
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -53,3 +53,24 @@ class ProfileForm(forms.ModelForm):
         for name, field in self.fields.items():
             #field.widget.attrs.update({'class': 'input input--text'})
             field.widget.attrs.update({'class': 'input input--text'})         
+
+
+class SpecialityForm(forms.ModelForm):
+    """
+    Form for creating and editing Speciality instances, which represent 
+    specific areas of expertise or focus for farmers.
+    """
+    class Meta:
+        model = Speciality
+        #fields = ['name', 'description']
+        fields = '__all__' # <--- Alternative to explicitly listing fields, but less secure if new fields are added to the model in the future without updating the form. Use with caution.
+        exclude = ['owner'] # Exclude the owner field since it will be set programmatically in the view based on the logged-in user.
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Programmatic Styling Loop: 
+        # Inject modern form classes to every field widget
+        for name, field in self.fields.items():
+            #field.widget.attrs.update({'class': 'input input--text'})
+            field.widget.attrs.update({'class': 'input'})            

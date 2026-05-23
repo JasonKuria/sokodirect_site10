@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import  User
-from .models import Profile
+from .models import Profile, Speciality
 from django.contrib import messages
 #from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm, ProfileForm
+from .forms import CustomUserCreationForm, ProfileForm, SpecialityForm
 
 
 def loginUser(request):
@@ -114,11 +114,21 @@ def user_Profile(request, pk):
     profile = Profile.objects.get(id=pk)
 
     # Speciality with a description
-    topSpeciality = profile.speciality_set.exclude(description__exact="")
+    #topSpeciality = profile.speciality_set.exclude(description__exact="")
+    # 1. Top Specialties: Exclude BOTH null values and empty strings
+    #topSpeciality = profile.speciality_set.exclude(description__isnull=True).exclude(description__exact="")
+    # 1. Top Specialties: Has a description (Excludes both Null values and empty strings)
+    topSpeciality = Speciality.objects.filter(owner=profile).exclude(description__isnull=True).exclude(description__exact="")
+
     # Speciality without a description
-    otherSpeciality = profile.speciality_set.filter(description="")
+    #otherSpeciality = profile.speciality_set.filter(description="")
+    # 2. Other Specialties: Get rows where description is EITHER null or an empty string
+    #otherSpeciality = profile.speciality_set.filter(description__isnull=True) | profile.speciality_set.filter(description="")
+    # 2. Other Specialties: Has no description (Gets rows where description is EITHER null or an empty string)
+    otherSpeciality = Speciality.objects.filter(owner=profile, description__isnull=True) | Speciality.objects.filter(owner=profile, description="")
     
-    context = {'profile': profile, 'topSpeciality': topSpeciality, 
+    context = {'profile': profile, 
+               'topSpeciality': topSpeciality, 
                'otherSpeciality': otherSpeciality}
 
     # Renders the user profile page
@@ -170,4 +180,48 @@ def editAccount(request):
     context = {'form': form}
     return render(request, 'users/profile_form.html', context)    
 
+@login_required(login_url='login') 
+def createSpeciality(request):
+    profile = request.user.profile # Extract profile for the current user session
+    form = SpecialityForm()
 
+    if request.method == 'POST':
+        form = SpecialityForm(request.POST)
+        if form.is_valid():
+            speciality = form.save(commit=False) # Hold the new speciality instance in memory before saving to the database
+            speciality.owner = profile # Set the owner of the speciality to the current user's profile
+            speciality.save() # Save the speciality instance to the database
+            messages.success(request, "Speciality added successfully!")
+            return redirect('account') # Redirect back to the user's account page after creating a new speciality
+        
+    context = {'form': form}
+    return render(request, 'users/speciality_form.html', context)
+
+
+@login_required(login_url='login') 
+def updateSpeciality(request, pk):
+    profile = request.user.profile # Extract profile for the current user session
+    speciality = profile.speciality_set.get(id=pk) # Get the specific speciality instance that belongs to the user's profile using the primary key from the URL
+    form = SpecialityForm(instance=speciality) # Pre-populate the form with the existing speciality data for editing
+
+    if request.method == 'POST':
+        form = SpecialityForm(request.POST, instance=speciality) # Bind the submitted data to the existing speciality instance for update
+        if form.is_valid():
+            form.save() # Save the speciality instance to the database
+            messages.success(request, "Speciality updated successfully!")
+            return redirect('account') # Redirect back to the user's account page after creating a new speciality
+        
+    context = {'form': form}
+    return render(request, 'users/speciality_form.html', context)
+
+def deleteSpeciality(request, pk):
+    profile = request.user.profile # Extract profile for the current user session
+    speciality = profile.speciality_set.get(id=pk) # Get the specific speciality instance that belongs to the user's profile using the primary key from the URL
+
+    if request.method == 'POST':
+        speciality.delete() # Delete the speciality instance from the database
+        messages.success(request, "Speciality deleted successfully!")
+        return redirect('account') # Redirect back to the user's account page after deleting the speciality
+    
+    context = {'object': speciality} # Pass the speciality instance to the template for confirmation
+    return render(request, 'delete-template.html', context)

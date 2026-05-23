@@ -16,4 +16,9 @@ urlpatterns = [
     path('account/', views.userAccount, name='account'), # <--- New User Account Route
     path('edit-account/', views.editAccount, name='edit-account'), # <--- Profile Form Path
 
+    # Creaste Speciality Path
+    path('create-speciality/', views.createSpeciality, name='create-speciality'),
+    path('update-speciality/<str:pk>/', views.updateSpeciality, name='update-speciality'),
+    path('delete-speciality/<str:pk>/', views.deleteSpeciality, name='delete-speciality'),
+
 ]

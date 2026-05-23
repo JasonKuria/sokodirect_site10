@@ -36,6 +36,7 @@
             <h3 class="devInfo__title">About Me</h3>
             <p class="devInfo__about">{{profile.bio}}</p>
           </div>
+
           <div class="devInfo">
             <h3 class="devInfo__title">Specialities</h3>
             <div class="devInfo__skills">
@@ -54,13 +55,14 @@
 
                 {% for speciality in otherSpeciality %}
                 <span class="tag tag--pill tag--sub tag--lg">
-                  <small>{{speciality}}</small>
+                  <small>{{speciality.name}}</small>
                 </span>
                 {% endfor %}
 
               </div>
             </div>
           </div>
+          
           <div class="devInfo">
             <h3 class="devInfo__title">Products</h3>
             <div class="grid grid--two">
