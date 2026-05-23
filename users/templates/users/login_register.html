@@ -1,42 +1,111 @@
 {% extends 'main.html' %}
+{% load static %}
 {% block content %}
 
-<main class="auth my-xl">
-    <div class="card text-center">
-        <div class="card__body dev">
             
-            {% if page == 'register' %}
-                <h3>Create a SokoDirect Account</h3>
-                
-                <form action="{% url 'register' %}" method="POST" class="form">
+{% if page == 'register' %}
+
+   <div class="auth">
+
+      <div class="card">
+
+        <div class="auth__header text-center">
+          <a href="/">
+            <img src="{% static 'images/icon.svg' %}" alt="icon" />
+          </a>
+          <h3>Register and Account</h3>
+          <p>Create a new developer account</p>
+        </div>
+
+        <form action="{% url 'register' %}" method="POST" class="form auth__form">
                     {% csrf_token %}
-                    
-                    {{ form.as_p }}
-                    
-                    <input class="btn btn--sub btn--lg" type="submit" value="Register Account" />
-                </form>
-                <p>Already have an account? <a href="{% url 'login' %}">Log In Here</a></p>
+
+          {% for field in form %}
+            <!-- Input:Text -->
+            <div class="form__field">
+                <label for="formInput#text">{{field.label}}: </label>
+                {{field}}
+
+                <!--{% if field.help_text %}
+                  <small>{{field.help_text}}</small>>
+                {% endif %}-->
+
+                {% for error in field.errors %}
+                  <p style="color: red;">{{error}}</p>
+                {% endfor %}
+            </div>          
+          {% endfor %}
+
+
+
+
+
+          <div class="auth__actions">
+            <input class="btn btn--sub btn--lg" type="submit" value="Sign  In" />
+          </div>
+        </form>
+        
+        <div class="auth__alternative">
+          <p>Already have an Account?</p>
+          <a href="{% url 'login' %}">Log In</a>
+        </div>
+      </div>
+    </div>
                 
-            {% else %}
-                <h3>SokoDirect Platform Login</h3>
-                
-                <form action="{% url 'login' %}" method="POST" class="form">
-                    {% csrf_token %}
-                    <div class="form__field">
-                        <label for="username">Username: </label>
-                        <input class="input input--text" id="username" type="text" name="username" placeholder="Enter your username" required />
+{% else %}
+
+<div class="auth">
+
+    <div class="card">
+
+        <div class="auth__header text-center">
+                    <a href="/">
+                        <img src="{% static 'images/icon.svg' %}" alt="icon" />
+                    </a>
+                    <h3>Account Login</h3>
+                    <p>Hello Developer, Welcome Back!</p>
                     </div>
-                    <div class="form__field">
-                        <label for="password">Password: </label>
-                        <input class="input input--password" id="password" type="password" name="password" placeholder="••••••••" required />
-                    </div>
-                    <input class="btn btn--sub btn--lg" type="submit" value="Secure Login" />
-                </form>
-                <p>New to the marketplace? <a href="{% url 'register' %}">Sign Up Here</a></p>
-            {% endif %}
-            
+
+                    <form action="{% url 'login' %}" method="POST" class="form auth__form">
+                        {% csrf_token %}
+
+                        <!-- Input:Username -->
+                        <div class="form__field">
+                            <label for="formInput#text">Username: </label>
+                            <input
+                            class="input input--text"
+                            id="formInput#text"
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username..."
+                            />
+                        </div>
+
+                        <!-- Input:Password -->
+                        <div class="form__field">
+                            <label for="formInput#password">Password: </label>
+                            <input
+                            class="input input--password"
+                            id="formInput#passowrd"
+                            type="password"
+                            name="password"
+                            placeholder="••••••••"
+                            />
+                        </div>
+                        <div class="auth__actions">
+                            <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+                            <a href="forgetpassword.html">Forget Password?</a>
+                        </div>
+                    </form>
+                    
+                    <div class="auth__alternative">
+                    <p>Don’t have an Account?</p>
+                    <a href="{% url 'register' %}">Sign Up</a>
         </div>
     </div>
-</main>
+</div>
+
+{% endif %}
+
 
 {% endblock content %}
