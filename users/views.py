@@ -5,7 +5,7 @@ from django.contrib.auth.models import  User
 from .models import Profile
 from django.contrib import messages
 #from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 
 
 def loginUser(request):
@@ -85,7 +85,8 @@ def registerUser(request):
             # Seamless Onboarding: 
             # Instantly authorize the session cookies without forcing a manual re-login stage
             login(request, user)
-            return redirect('profiles')
+            #return redirect('profiles')
+            return redirect('edit-account') # Redirect new users to the profile edit page immediately after registration to encourage them to complete their profile setup. 
         else:
             messages.error(
                 request, "An error occurred during account creation.")
@@ -147,5 +148,26 @@ def userAccount(request):
         'products': products
     }
     return render(request, 'users/account.html', context)
+
+@login_required(login_url='login') # Enforces that only authenticated users can access the editAccount view, redirecting unauthenticated users to the login page. 
+def editAccount(request):
+    """
+    Renders the form to edit profile details and processes updates.
+    """
+    profile = request.user.profile # Extract profile for the current user session
+    
+    # Pre-populate the form with the current record instance
+    form = ProfileForm(instance=profile) # instance=profile-> prefill the fields with the existing data from the profile instance
+    
+    if request.method == 'POST':
+        # Bind incoming data and file attachments to the existing record
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            # Redirect the user safely back to their dashboard hub
+            return redirect('account')
+            
+    context = {'form': form}
+    return render(request, 'users/profile_form.html', context)    
 
 

@@ -28,6 +28,16 @@ def CreateProfile(sender, instance, created, **kwargs):
         )
         print('Profile created for user: ', profile)
 
+def updateUser(sender, instance, created, **kwargs):
+    profile = instance # the profile that was updated
+    user = profile.user # get the user associated with the profile
+    
+    if created == False: # only update user if profile is updated, not created
+        user.username = profile.username # update username in user model to match profile
+        user.email = profile.email # update email in user model to match profile
+        user.first_name = profile.name # update first name in user model to match profile
+        user.save() # save the updated user model        
+
 def deleteUser(sender, instance, **kwargs):
     try:
         user = instance.user
@@ -44,6 +54,12 @@ def deleteUser(sender, instance, **kwargs):
 # this is a receiver (post_save) 
 # that listens for when a user is saved (created or updated)
 post_save.connect(CreateProfile, sender=User)    
+
+# Every time a profile is updated, 
+# the updateUser function will be called to update the corresponding user
+# here we trigger the updateUser function to update the user model 
+# whenever the profile is updated,
+post_save.connect(updateUser, sender=Profile) 
 
 # When a profile is deleted 
 # we want to delete the corresponding user as well, 

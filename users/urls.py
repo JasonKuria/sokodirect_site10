@@ -14,5 +14,6 @@ urlpatterns = [
 
     # Secure Account Space Tracking Paths
     path('account/', views.userAccount, name='account'), # <--- New User Account Route
+    path('edit-account/', views.editAccount, name='edit-account'), # <--- Profile Form Path
 
 ]
