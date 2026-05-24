@@ -1,13 +1,30 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Product
+#from django.db.models import Q
+from .models import Product, Category
 from .forms import ProductForm
-
+from .utils import searchProducts
 
 def products(request):
+    products, search_query = searchProducts(request) # Call the searchProducts utility function to retrieve the filtered products and the search query. This allows the view to display the relevant products based on the user's search input and also pass the search query back to the template for display in the search input field.
+    
+    #search_query = ''
+
+    #if request.GET.get('search_query'): 
+    #    search_query = request.GET.get('search_query')
+
+    #category = Category.objects.filter(name__icontains=search_query) # Perform a case-insensitive search on the 'name' field of the Category model to find categories that match the search query. The resulting queryset is stored in the 'category' variable, which is then used to filter products based on their associated categories.        
+
+    #products = Product.objects.distinct().filter(
+    #    Q(title__icontains=search_query) | 
+    #    Q(description__icontains=search_query) | 
+    #    Q(owner__name__icontains=search_query) | # Allow searching by the owner's name as well, which is a common requirement in marketplace applications where users may want to find products by specific sellers. This enhances the search functionality by enabling users to find products not only by their title and description but also by the name of the seller, making it easier to discover products from preferred sellers or brands.
+    #    Q(categories__in=category) # Filter products based on their associated categories that match the search query. This allows users to find products not only by title and description but also by the categories they belong to, making it easier to discover products within specific categories of interest.
+    #)
+
     # R — Read: get all products from the database
-    products = Product.objects.all()
-    context = {'products': products}
+    #products = Product.objects.all()
+    context = {'products': products, 'search_query': search_query} # Pass the search query back to the template so that it can be displayed in the search input field, allowing users to see their current search term and modify it if needed.
     return render(request, 'products/products.html', context)
 
 

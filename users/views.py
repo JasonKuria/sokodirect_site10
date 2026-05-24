@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import  User
+from django.db.models import Q # Import the Q object for complex queries
 from .models import Profile, Speciality
 from django.contrib import messages
 #from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, ProfileForm, SpecialityForm
+from .utils import searchProfiles
 
 
 def loginUser(request):
@@ -95,19 +97,33 @@ def registerUser(request):
     return render(request, 'users/login_register.html', context)
 
 
-
-
-
-
-
-
-
 def profiles(request):
-    profiles = Profile.objects.all()
+    profiles, search_query = searchProfiles(request) # Call the searchProfiles utility function to retrieve the filtered profiles and the search query. This allows the view to display the relevant profiles based on the user's search input and also pass the search query back to the template for display in the search input field.
+
+    # Get the search query from the URL parameters, defaulting to an empty string if not provided
+    #search_query = ''
+
+    #if request.GET.get('search_query'): # Extract that querry parameter from the URL and store it in the search_query variable. This allows the view to filter the profiles based on the user's search input.
+    #    search_query = request.GET.get('search_query')
+
+    #print("Search Query", search_query) # Debugging statement to verify that the search query is being captured correctly from the URL parameters.        
+
+    #speciality = Speciality.objects.filter(name__icontains=search_query) # Perform a case-insensitive exact match search on the 'name' field of the Speciality model to find a speciality that matches the search query. The first matching speciality is stored in the 'speciality' variable, which is then used to filter profiles based on their associated specialities.
+
+    #profiles = Profile.objects.filter(name__icontains=search_query) # Perform a case-insensitive search on the 'name' field of the Profile model to filter profiles that contain the search query. The resulting queryset is stored in the 'profiles' variable, which is then passed to the template for rendering.
+    #profiles = Profile.objects.filter(
+    #    name__icontains=search_query, short_intro__icontains=search_query) # Perform a case-insensitive search on both the 'name' and 'short_intro' fields of the Profile model to filter profiles that contain the search query in either field. The resulting queryset is stored in the 'profiles' variable, which is then passed to the template for rendering.
+    #profiles = Profile.objects.distinct().filter( # Perform a case-insensitive search on both the 'name' and 'short_intro' fields of the Profile model to filter profiles that contain the search query in either field. The resulting queryset is stored in the 'profiles' variable, which is then passed to the template for rendering.
+    #    Q(name__icontains=search_query) | 
+    #    Q(short_intro__icontains=search_query) | 
+    #    Q(speciality__in=speciality)) # Filter profiles based on their associated specialities that match the search query. This allows users to find profiles not only by name and introduction but also by the specialities they offer.
+    
+
+    #profiles = Profile.objects.all()    
 
     # Renders the users(farmer) profiles listing page
     # Will query Profile.objects.all() once model is built
-    context = {'profiles': profiles}
+    context = {'profiles': profiles, 'search_query': search_query}
     return render(request, 'users/profiles.html', context)
 
 def user_Profile(request, pk):
