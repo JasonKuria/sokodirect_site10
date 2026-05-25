@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 #from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Product, Category
-from .forms import ProductForm
+from .forms import ProductForm, ReviewForm
 from .utils import searchProducts, paginateProducts
 
 def products(request):
@@ -44,9 +45,27 @@ def products(request):
 
 def single_product(request, pk):
     # R — Read: get one specific product and its related data
-    product = Product.objects.get(id=pk)
-    reviews = product.review_set.all()    # all reviews for this product
-    context = {'product': product, 'reviews': reviews}
+    productObj = Product.objects.get(id=pk)
+
+    #reviews = product.review_set.all()    # all reviews for this product
+    form = ReviewForm() # empty form for submitting a new review
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST) # populate form with submitted data
+        if form.is_valid():
+            review = form.save(commit=False) # create review object but don't save to DB yet
+            review.product = productObj # associate review with the current product
+            review.owner = request.user.profile # set the owner of the review to the logged-in user's profile
+            review.save() # save the review to the database
+
+            # Update the product's vote total and ratio
+            productObj.getVoteCount # call the getVoteCount property to update the product's vote_total and vote_ratio fields based on the new review
+
+            messages.success(request, 'Your review was submitted successfully!')
+            return redirect('single-product', pk=productObj.id) # redirect to the same product page to show the new review
+
+
+    context = {'product': productObj, 'form': form} # pass the empty form to the template so that it can be rendered on the product detail page, allowing users to submit new reviews for the product.
     return render(request, 'products/single-product.html', context)
 
 @login_required(login_url='login')

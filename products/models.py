@@ -101,13 +101,37 @@ class Product(models.Model):
     def __str__(self):
         return self.title
     
+    class Meta: # newest products first when we query for products, they will be order -ed by created date descending by default
+        #ordering = ['created']  # oldest products first
+        ordering = ['-vote_ratio', '-vote_total', 'title']  # order by vote ratio desc, then vote total desc, then title asc
+
+    @property
+    def reviewers(self): # this is a property method that returns a list of user IDs who have reviewed this product
+        queryset = self.review_set.all().values_list('owner__id', flat=True) # get a list of user IDs who have reviewed this product using the reverse relationship
+        return queryset
+    
+    @property # this means we can call product.vote_count without parentheses, like an attribute instead of a method
+    def getVoteCount(self): 
+        reviews = self.review_set.all() # get all reviews for this product using the reverse relationship
+        upVotes = reviews.filter(value='up').count() # filter reviews to get only upvotes
+        totalVotes = reviews.count() # count total number of reviews for this product
+
+        ratio = (upVotes / totalVotes) * 100 # calculate the vote ratio as a percentage of upvotes out of total votes
+        self.vote_total = totalVotes # update the product's vote_total field with the total number of votes
+        self.vote_ratio = ratio # update the product's vote_ratio field with the calculated ratio
+
+        self.save() # save the product to update the vote_total and vote_ratio fields in the database
+    
 
 class Review(models.Model):
     VOTE_TYPE = (
         ('up', 'Upvote'),
         ('down', 'Downvote'),
     )
-    # reviewer = models.ForeignKey(Profile...) — added when Profile ready
+    # the user who wrote the review one to many relationship: 
+    # one user can write many reviews, but each review has only one owner
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE
     )
@@ -116,6 +140,9 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True,
                           primary_key=True, editable=False)
+    
+    class Meta: # Meta class to enforce one review per user per product
+        unique_together = [['owner', 'product']]  # one review per user per product
 
     def __str__(self):
         return self.value

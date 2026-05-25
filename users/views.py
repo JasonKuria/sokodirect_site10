@@ -23,7 +23,8 @@ def loginUser(request):
         return redirect('profiles')
 
     if request.method == 'POST':
-        username_input = request.POST.get('username').strip()
+        #username_input = request.POST.get('username').strip()
+        username_input = request.POST.get('username').strip().lower()
         password_input = request.POST.get('password')
         
         # 1. Validation Step: Explicitly verify if the username exists
@@ -43,7 +44,10 @@ def loginUser(request):
             messages.success(request, f"Welcome back to SokoDirect, {user.username}!")
             # Redirects user to the homepage to the profiles listing page after successful login
             # or the previously page they were trying to access before being prompted to login
-            return redirect('profiles') 
+            #return redirect('profiles') 
+
+            return redirect(request.GET['next'] if 'next' in request.GET else 'account')
+        
         else:
             messages.error(request, "Username Or password Incorrect. Please try again.")
 
