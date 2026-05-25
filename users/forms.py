@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Speciality
+from .models import Profile, Speciality, Message
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -73,4 +73,18 @@ class SpecialityForm(forms.ModelForm):
         # Inject modern form classes to every field widget
         for name, field in self.fields.items():
             #field.widget.attrs.update({'class': 'input input--text'})
-            field.widget.attrs.update({'class': 'input'})            
+            field.widget.attrs.update({'class': 'input'})         
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['name', 'email', 'subject', 'body']    
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Programmatic Styling Loop: 
+        # Inject modern form classes to every field widget
+        for name, field in self.fields.items():
+            #field.widget.attrs.update({'class': 'input input--text'})
+            field.widget.attrs.update({'class': 'input'})                      

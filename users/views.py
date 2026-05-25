@@ -3,10 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import  User
 from django.db.models import Q # Import the Q object for complex queries
-from .models import Profile, Speciality
+from .models import Profile, Speciality, Message
 from django.contrib import messages
 #from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm, ProfileForm, SpecialityForm
+from .forms import CustomUserCreationForm, ProfileForm, SpecialityForm, MessageForm
 from .utils import searchProfiles, paginateProfiles
 
 
@@ -237,6 +237,7 @@ def updateSpeciality(request, pk):
     context = {'form': form}
     return render(request, 'users/speciality_form.html', context)
 
+@login_required(login_url='login')
 def deleteSpeciality(request, pk):
     profile = request.user.profile # Extract profile for the current user session
     speciality = profile.speciality_set.get(id=pk) # Get the specific speciality instance that belongs to the user's profile using the primary key from the URL
@@ -248,3 +249,54 @@ def deleteSpeciality(request, pk):
     
     context = {'object': speciality} # Pass the speciality instance to the template for confirmation
     return render(request, 'delete-template.html', context)
+
+@login_required(login_url='login')
+def inbox(request):
+    profile = request.user.profile
+    messageRequest = profile.messages.all()
+    unreadCount = messageRequest.filter(is_read=False).count()
+
+    context = {'messageRequest': messageRequest, 'unreadCount': unreadCount}
+    return render(request, 'users/inbox.html', context)
+
+@login_required(login_url='login')
+def viewMessage(request, pk):
+    profile = request.user.profile
+    message = profile.messages.get(id=pk)
+
+    if message.is_read == False:
+        message.is_read = True
+        message.save()
+
+    context = {'message': message}
+    return render(request, 'users/message.html', context)
+
+def createMessage(request, pk):
+    recipient = Profile.objects.get(id=pk)
+    form = MessageForm()
+
+    try:
+        sender = request.user.profile
+    except:
+        sender = None
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        #SAVE recipient
+        if form.is_valid():
+            message = form.save(commit=False)      
+            message.sender = sender  
+            message.recipient = recipient
+
+        #SAVE sender 
+        if sender:
+            message.name = sender.name
+            message.email = sender.email
+        message.save()     
+
+        messages.success(request, 'Your message was successfully sent!!')       
+        return redirect('user_profile', pk=recipient.id)
+
+    context = {'recipient': recipient, 'form': form}
+    return render(request, 'users/message_form.html', context)

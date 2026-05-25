@@ -148,7 +148,7 @@ class Review(models.Model):
         return self.value
     
 
-
+"""
 class Message(models.Model):
     sender = models.ForeignKey(
         Profile, on_delete=models.SET_NULL,
@@ -168,7 +168,7 @@ class Message(models.Model):
                           primary_key=True, editable=False)
     def __str__(self):
         return self.subject
-
+"""
 
 
 
