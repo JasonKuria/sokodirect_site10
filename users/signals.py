@@ -10,6 +10,9 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User # Django's built-in User model
 from .models import Profile # import the Profile model to create a profile when a user is created
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 # this is the receiver function (profileUpdated)
 # that we are going to trigger when a new user is created
 # where we will parse some sender 
@@ -26,7 +29,18 @@ def CreateProfile(sender, instance, created, **kwargs):
             email=user.email, # copy email from user to profile for easy access
             name=user.first_name # copy first name from user to profile for easy access
         )
-        print('Profile created for user: ', profile)
+        #print('Profile created for user: ', profile)
+
+        subject = 'Welcome to SokoDirect'
+        message = 'We are glad you are here!!'
+
+        send_mail(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [profile.email],
+            fail_silently=False,
+        )
 
 def updateUser(sender, instance, created, **kwargs):
     profile = instance # the profile that was updated
