@@ -74,6 +74,12 @@ class Product(models.Model):
         upload_to='products/' # saves to media/products/
     )
 
+    class Meta:
+        # newest products first 
+        # when we query for products, they will be order
+        # -ed by created date descending by default 
+        # ordering = ['-created']  
+        ordering = ['created']  # oldest products first
 
 
 

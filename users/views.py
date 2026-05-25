@@ -7,7 +7,7 @@ from .models import Profile, Speciality
 from django.contrib import messages
 #from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, ProfileForm, SpecialityForm
-from .utils import searchProfiles
+from .utils import searchProfiles, paginateProfiles
 
 
 def loginUser(request):
@@ -100,6 +100,9 @@ def registerUser(request):
 def profiles(request):
     profiles, search_query = searchProfiles(request) # Call the searchProfiles utility function to retrieve the filtered profiles and the search query. This allows the view to display the relevant profiles based on the user's search input and also pass the search query back to the template for display in the search input field.
 
+    profiles, custom_range = paginateProfiles(request, profiles, 1) # Call the paginateProfiles utility function to paginate the filtered profiles. This allows the view to display a subset of profiles per page and also pass a custom range for pagination links to the template.
+    
+
     # Get the search query from the URL parameters, defaulting to an empty string if not provided
     #search_query = ''
 
@@ -123,7 +126,7 @@ def profiles(request):
 
     # Renders the users(farmer) profiles listing page
     # Will query Profile.objects.all() once model is built
-    context = {'profiles': profiles, 'search_query': search_query}
+    context = {'profiles': profiles, 'search_query': search_query, 'custom_range': custom_range}
     return render(request, 'users/profiles.html', context)
 
 def user_Profile(request, pk):
