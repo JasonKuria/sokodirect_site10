@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
 
+     "rest_framework",
+
 
     
 ]
