@@ -13,7 +13,7 @@
                 <i class="im im-edit"></i> 
                 Edit
               </a>
-              <img class="avatar avatar--xl dev__avatar" src="{{profile.profile_image.url}}" />
+              <img class="avatar avatar--xl dev__avatar" src="{{profile.imageURL}}" />
               <h2 class="dev__name">{{profile.name}}</h2>
               <p class="dev__title">{{profile.short_intro}}</p>
               <p class="dev__location">Based in {{profile.county}}</p>
@@ -69,7 +69,7 @@
             <h3 class="settings__title">Products</h3>
             <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'create-product' %}">
               <i class="im im-plus"></i> 
-              Add Projectxx
+              Add a Product
             </a>
           </div>
 
@@ -79,7 +79,7 @@
             <tr>
               <td class="settings__thumbnail">
                 <a href="{% url 'single-product' product.id %}">
-                  <img src="{{product.featured_image.url}}" alt="Project Thumbnail" />
+                  <img src="{{product.imageURL}}" alt="Project Thumbnail" />
                 </a>
               </td>
               <td class="settings__tableInfo">

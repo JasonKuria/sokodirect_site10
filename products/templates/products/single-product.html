@@ -18,19 +18,21 @@
           </div>
 
           {% if product.contact_link %}
-          <a class="singleProject__liveLink" href="#" target="_blank"><i class="im im-external-link"></i>Contact Link
+          <a class="singleProject__liveLink" href="{{product.contact_link}}" target="_blank">
+            <i class="im im-external-link"></i>Contact Link
           </a>
           {% endif %}
 
           {% if product.farm_link %}
-          <a class="singleProject__liveLink" href="#" target="_blank"><i class="im im-external-link"></i>Farm Link
+          <a class="singleProject__liveLink" href="{{product.farm_link}}" target="_blank">
+            <i class="im im-external-link"></i>Farm Link
           </a>
           {% endif %}
           
           
         </div>
         <div class="column column--2of3">
-          <img class="singleProject__preview" src="{{ product.featured_image.url }}" alt="portfolio thumbnail" />
+          <img class="singleProject__preview" src="{{ product.imageURL }}" alt="portfolio thumbnail" />
           <a href="{% url 'user_profile' product.owner.id %}" class="singleProject__developer">
             By {{product.owner.name}}
           </a>

@@ -61,7 +61,18 @@ class Profile(models.Model):
         # Display username in admin panel instead of "Profile object"
         #return str(self.user.username)
         return str(self.username)
+    
+    class Meta: 
+        ordering = ['created']  # newest profiles first  the dash gives us descending order, so newest profiles appear first when we query for profiles
 
+    @property
+    def imageURL(self): # method to get the URL of the profile image, used in templates
+        try:
+            url = self.profile_image.url # if there is an image, get its URL
+        except: # if there is no image, return empty string to avoid errors in templates
+            url = ''
+        return url
+    
 
 # User’s (Farmer's) speciality e.g. Dairy, Tomatoes, Poultry
 # ManyToMany with Profile - one user(farmer) can have many specialities

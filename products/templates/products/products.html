@@ -35,7 +35,7 @@
           <div class="column">
             <div class="card project">
               <a href="{% url 'single-product' product.id %}" class="project">
-                <img class="project__thumbnail" src="{{ product.featured_image.url }}" alt="product thumbnail" />
+                <img class="project__thumbnail" src="{{ product.imageURL }}" alt="product thumbnail" />
                 <div class="card__body">
                   <h3 class="project__title">{{ product.title }}</h3>
 

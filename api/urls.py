@@ -16,4 +16,6 @@ urlpatterns = [
     path('', views.getRoutes),
     path('products/', views.getProducts),
     path('product/<str:pk>', views.getProduct),    
+
+    path('remove-category/', views.removeCategory), # Endpoint to remove a category from a product using a DELETE request with the categoryId and product
 ]

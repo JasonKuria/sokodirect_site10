@@ -48,7 +48,7 @@ class Product(models.Model):
     # null=True: a product can exist without an owner temporarily
     owner = models.ForeignKey(
         Profile,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,  # if farmer deletes account, delete their products too
         null=True, blank=True
     )
 
@@ -104,6 +104,14 @@ class Product(models.Model):
     class Meta: # newest products first when we query for products, they will be order -ed by created date descending by default
         #ordering = ['created']  # oldest products first
         ordering = ['-vote_ratio', '-vote_total', 'title']  # order by vote ratio desc, then vote total desc, then title asc
+
+    @property
+    def imageURL(self): # this is a property method that returns the URL of the product's featured image
+        try:
+            url = self.featured_image.url # try to get the URL of the featured image
+        except: # if there is an error (e.g. no image uploaded), return an empty string
+            url = ''
+        return url
 
     @property
     def reviewers(self): # this is a property method that returns a list of user IDs who have reviewed this product

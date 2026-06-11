@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import ProductSerializer
-from products.models import Product
+from products.models import Category, Product
 
 #tell us all the urls paths we have
 @api_view(['GET'])
@@ -38,3 +38,15 @@ def getProduct(request, pk):
     product = Product.objects.get(id=pk)
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def removeCategory(request):
+    categoryId = request.data['categoryId']
+    productId = request.data['productId']
+
+    product = Product.objects.get(id=productId)
+    category = Category.objects.get(id=categoryId)
+
+    product.categories.remove(category) # Remove the category from the product's categories. This will disassociate the category from the product without deleting either object from the database.
+
+    return Response('Category was deleted')

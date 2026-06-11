@@ -80,11 +80,19 @@ def create_product(request):
     form = ProductForm()
 
     if request.method == 'POST':
+        newCategories = request.POST.get('newcategories').replace(',', " ").split() # Get the new categories from the POST data, replace commas with spaces, and split into a list. This allows users to enter multiple categories separated by commas or spaces.
+        #print("DATA:", newCategories) # Debug: print POST data to console
+
         form = ProductForm(request.POST, request.FILES) # ← add request.FILES
         if form.is_valid():
             product = form.save(commit=False)  # create product object but don't save to DB yet
             product.owner = profile  # set the owner to the logged-in user's profile
             form.save()
+
+            for cat in newCategories:
+                category, created = Category.objects.get_or_create(name=cat) # Get or create a Category object for each category name in the newCategories list. This allows the application to handle both existing and new categories without duplication.
+                product.categories.add(category) # Add the category to the product's categories. This establishes the many-to-many relationship between the product and its categories.         
+
             return redirect('account')
 
     context = {'form': form}
@@ -101,12 +109,19 @@ def update_product(request, pk):
     form = ProductForm(instance=product)   # pre-fill with existing data
 
     if request.method == 'POST':
+        newCategories = request.POST.get('newcategories').replace(',', " ").split() # Get the new categories from the POST data, replace commas with spaces, and split into a list. This allows users to enter multiple categories separated by commas or spaces.
+        #print("DATA:", newCategories) # Debug: print POST data to console
+
         form = ProductForm(request.POST, request.FILES, instance=product) # ← add request.FILES
         if form.is_valid():
-            form.save()
+            #form.save()
+            product = form.save()   
+            for cat in newCategories:
+                category, created = Category.objects.get_or_create(name=cat) # Get or create a Category object for each category name in the newCategories list. This allows the application to handle both existing and new categories without duplication.
+                product.categories.add(category) # Add the category to the product's categories. This establishes the many-to-many relationship between the product and its categories.         
             return redirect('account')
 
-    context = {'form': form}
+    context = {'form': form, 'product': product}
     return render(request, 'products/product-form.html', context)
 
 @login_required(login_url='login')

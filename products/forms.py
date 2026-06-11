@@ -9,7 +9,7 @@ class ProductForm(ModelForm):
         fields = [
             'title', 'description', 'price',
             'quantity_available', 'unit',
-            'county', 'categories',
+            'county',
             'contact_link', 'farm_link',
             'featured_image',
         ]
