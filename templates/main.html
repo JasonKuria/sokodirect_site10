@@ -1,0 +1,22 @@
+{# templates/main.html #}
+ 
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Company SokoDirect Site</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+ 
+    {% include 'navbar.html' %}
+ 
+    {% block content %}
+    {% endblock content %}
+ 
+    <footer>
+        © 2026 SokoDirect | Nairobi, Kenya
+    </footer>
+ 
+</body>
+</html>
