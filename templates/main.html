@@ -18,37 +18,15 @@
  <!-- Dev Search UI -->
   <link rel="stylesheet" href="{% static 'styles/app.css' %}" />
 
-  <title>SokoDirect Marketplace</title>
+  <title>SokoDirect - Connect with Farmers!</title>
 </head>
 
 <body>
     {% include 'navbar.html' %}
 
-    <!-- Inject Global System Messages UI 
-         To ensure alerts (errors, notifications, or successes) display seamlessly across any page 
-        a user visits, we inject the messaging processor loop directly into our master layout file.
-e    -->
+    {% block content %}
+    {% endblock content %}
 
-
-
-    {% if messages %}
-        <div class="messages-global-wrapper" style="position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px; width: 100%;">
-            {% for message in messages %}
-                <div class="alert alert--{{ message.tags }}" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 15px; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <p class="alert__message" style="margin: 0; font-weight: 600;">{{ message }}</p>
-                    <button class="alert__close" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; line-height: 1;">×</button>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-
-    <div class="container-workspace">
-        {% block content %}
-        {% endblock content %}
-    </div>
-
-    <script src="{% static 'js/app.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+    <p>SokoDirect — Connecting Kenyan Farmers to Buyers</p>
 </body>
 </html>

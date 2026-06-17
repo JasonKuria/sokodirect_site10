@@ -10,17 +10,15 @@
         </div>
 
         <div class="hero-section__search">
-
-          <form id='searchForm' class="form" action="{% url 'products' %}" method="get">
+          <form class="form" action="#" method="get">
             <div class="form__field">
               <label for="formInput#search">Search By Farmers Produce </label>
-              <input class="input input--text" id="formInput#search" type="text" name="search_query"
-                placeholder="Search by Farm Produce Title" value="{{search_query}}"/>
+              <input class="input input--text" id="formInput#search" type="text" name="text"
+                placeholder="Search by Farm Produce Title" />
             </div>
 
             <input class="btn btn--sub btn--lg" type="submit" value="Search" />
           </form>
-
         </div>
       </div>
     </section>
@@ -35,7 +33,7 @@
           <div class="column">
             <div class="card project">
               <a href="{% url 'single-product' product.id %}" class="project">
-                <img class="project__thumbnail" src="{{ product.imageURL }}" alt="product thumbnail" />
+                <img class="project__thumbnail" src="{{ product.featured_image.url }}" alt="product thumbnail" />
                 <div class="card__body">
                   <h3 class="project__title">{{ product.title }}</h3>
 
@@ -43,7 +41,7 @@
                   <!-- Real user(farmer) name — queries up from product to its owner profile -->
                   <!-- product.owner = the Profile, product.owner.name = user(farmer's) name -->
                   <p>
-                    <a class="project__author" href="{% url 'user_profile' product.owner.id %}">
+                    <a class="project__author" href="">
                       By {{product.owner.name}}
                     </a>
                   </p>
@@ -73,38 +71,6 @@
       </div>
     </section>
 
-    {% comment %}
-    {% if products.has_other_pages %}
-    <div class="pagination">
-      <ul class="container">
-
-        {% if products.has_previous %}
-        <li><a href="?page={{ products.previous_page_number }}" class="btn page-link">&#10094; Prev</a></li>
-        {% endif %}
-
-        {#% for page in paginator.page_range %#}  
-        {% for page in custom_range %}         
-
-        {% if page == products.number %}
-         <li><a href="?page={{page}}" class="btn page-link btn--sub">{{page}}</a></li>
-        {% else %}
-         <li><a href="?page={{page}}" class="btn page-link">{{page}}</a></li>
-        {% endif %}        
-
-        {% endfor %}
-
-        {% if products.has_next %}
-        <li><a href="?page={{ products.next_page_number }}" class="btn page-link">Next &#10095;</a></li>
-        {% endif %}
-
-      </ul>
-
-    </div>
-    {% endif %}
-   {% endcomment %}
-
-   <!-- Include the pagination template -->
-   {% include 'pagination.html' with queryset=products custom_range=custom_range %}
 
   </main>
 

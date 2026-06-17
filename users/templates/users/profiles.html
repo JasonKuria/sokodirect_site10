@@ -2,26 +2,24 @@
 {% block content %}
 
   <!-- Main Section -->
-  <main class="home">
+  <main class="projects">
     <section class="hero-section text-center">
       <div class="container container--narrow">
         <div class="hero-section__box">
-          <h2>CONNECT WITH <span>FARMERS</span></h2>
-          <h2>FROM AROUND THE KENYA</h2>
+          <h2 style="color: #3fca3f">CONNECT WITH <span>FARMERS</span></h2>
+          <h2 style="color: #3fca3f"></h2>FROM AROUND THE KENYA</h2>
         </div>
 
         <div class="hero-section__search">
-
-          <form id='searchForm' class="form" action="{% url 'profiles' %}" method="get">
+          <form class="form" action="#" method="get">
             <div class="form__field">
               <label for="formInput#search">Search Farmers </label>
-              <input class="input input--text" id="formInput#search" type="text" name="search_query"
-                value="{{search_query}}" placeholder="Search by farmer name" />
+              <input class="input input--text" id="formInput#search" type="text" name="text"
+                placeholder="Search by farmer name" />
             </div>
 
             <input class="btn btn--sub btn--lg" type="submit" value="Search" />
           </form>
-
         </div>
       </div>
     </section>
@@ -36,7 +34,7 @@
             <div class="dev">
               <a href="{% url 'user_profile' profile.id %}" class="card__body">
                 <div class="dev__profile">
-                  <img class="avatar avatar--md" src="{{ profile.imageURL }}" alt="image" />
+                  <img class="avatar avatar--md" src="{{ profile.profile_image.url }}" alt="image" />
                   <div class="dev__meta">
                     <h3>{{profile.name}}</h3>
                     <h5>{{profile.short_intro|slice:"150"}}</h5>
@@ -63,7 +61,6 @@
       </div>
     </section>
 
-    {% include 'pagination.html' with queryset=profiles custom_range=custom_range %}
 
   </main>
 

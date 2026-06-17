@@ -3,8 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User # Django's built-in User model
 
 
-
-
 class Profile(models.Model):
     # OneToOne with Django's User model
     # One user = one profile, one profile = one user
@@ -59,20 +57,8 @@ class Profile(models.Model):
 
     def __str__(self):
         # Display username in admin panel instead of "Profile object"
-        #return str(self.user.username)
-        return str(self.username)
-    
-    class Meta: 
-        ordering = ['created']  # newest profiles first  the dash gives us descending order, so newest profiles appear first when we query for profiles
+        return str(self.user.username)
 
-    @property
-    def imageURL(self): # method to get the URL of the profile image, used in templates
-        try:
-            url = self.profile_image.url # if there is an image, get its URL
-        except: # if there is no image, return empty string to avoid errors in templates
-            url = ''
-        return url
-    
 
 # User’s (Farmer's) speciality e.g. Dairy, Tomatoes, Poultry
 # ManyToMany with Profile - one user(farmer) can have many specialities
@@ -93,23 +79,3 @@ class Speciality(models.Model):
 
     def __str__(self):
         return self.name
-    
-class Message(models.Model):
-    sender = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)    
-    recipient = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name="messages")    
-    name = models.CharField(max_length=200, null=True, blank=True)
-    email = models.EmailField(max_length=200, null=True, blank=True)   
-    subject = models.CharField(max_length=200, null=True, blank=True)     
-    body = models.TextField()
-    is_read = models.BooleanField(default=False, null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(
-        default=uuid.uuid4, unique=True,
-        primary_key=True, editable=False
-    )    
-
-    def __str__(self):
-        return self.subject 
-    
-    class Meta:
-        ordering = ['is_read', '-created']

@@ -6,7 +6,7 @@
     <main class="formPage my-xl">
         <div class="content-box">
             <div class="formWrapper">
-                <a class="backButton" href="{% url 'account' %}"><i class="im im-angle-left"></i></a>
+                <a class="backButton" href="#"><i class="im im-angle-left"></i></a>
                 <br>
 
                 <form class="form" method="POST" enctype="multipart/form-data">
@@ -20,63 +20,11 @@
                     </div>
                     {% endfor %}
 
-                    <div class="form__field">
-                      {% for category in product.categories.all %}
-                        <div class="product-category tag tag--pill tag--main" data-category-id="{{ category.id }}" data-product="{{product.id}}">
-                            {{category.name}} &#215;
-                        </div>
-                      {% endfor %}
-                    </div>
-
-                    <div class="form__field">
-                        <label for="formInput#text">Categories:</label>
-                        <textarea class="input" name="newcategories" placeholder="Add categories here ..."></textarea>
-                    </div>
-
                     <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
                 </form>
             </div>
         </div>
     </main>
-
-<script>
-    let categoryTags = document.getElementsByClassName('product-category'); // Get all elements with the class 'product-category', which represent the category tags displayed on the product form.
-    for (let i = 0; categoryTags.length > i; i++) {
-        categoryTags[i].addEventListener('click', (e)=> {
-            let categoryID = e.target.dataset.categoryId // Get the category ID from the data attribute of the clicked tag. This ID is used to identify which category to remove from the product.
-            let projectID = e.target.dataset.product // Get the product ID from the data attribute of the clicked tag. This ID is used to identify which product the category belongs to.
-
-            //console.log("Category ID:", categoryID) // Debug: print the category ID to the console to verify that it is being captured correctly.
-            //console.log("Product ID:", projectID) // Debug: print the product ID to the
-
-            fetch('http://127.0.0.1:8000/api/remove-category/', {
-                method: 'DELETE', // Use the DELETE method to indicate that we want to remove a category from the product.
-                headers: {
-                    'Content-Type': 'application/json', // Set the content type to JSON since we are sending JSON data in the request body.
-                },
-                //body: JSON.stringify({'productId': projectID, 'categoryId': categoryID}) // Send the category ID and product ID in the request body as a JSON string. This allows the server to identify which category to remove from which product.
-                //body: JSON.stringify({'productId': projectID, 'categoryId': categoryID}) // Send the category ID and product ID in the request body as a JSON string. This allows the server to identify which category to remove from which product.
-
-                // Pull variables directly from the clicked element's data attributes
-                //const projectIDx = this.getAttribute('data-product-id');
-                //const categoryIDx = this.getAttribute('data-category-id');
-                
-
-                body: JSON.stringify({ 'productId': productID, 'categoryId': categoryID }) // Send the category ID and product ID in the request body as a JSON string. This allows the server to identify which category to remove from which product.
-
-                .then(response => response.json()) // Parse the response from the server as JSON.
-                .then(data => {
-                    //console.log('Success:', data); // Log the success message from the server to the console for debugging purposes.
-                    e.target.remove() // Remove the clicked category tag from the DOM to reflect the change immediately on the user interface.
-                })                
-
-            })
-
-
-        })
-
-    }
-</script>
 
 
 {% endblock content %}

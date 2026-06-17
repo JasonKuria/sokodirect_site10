@@ -1,12 +1,13 @@
 {% load static %}
 
   <!-- Header Section -->
-  <header class="header">
+<header class="header" style="background-color: #113821 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-bottom: 3px solid #1e8a57; padding: 1.2rem 0;">
+  
     <div class="container container--narrow">
       <!-- Logo - now goes to user(farmer) profiles (homepage) -->
-      <a href="{% url 'profiles' %}" class="header__logo">
-        <img src="{% static 'images/logo.svg' %}" alt="FarmerSearch Logo" />
-      </a>
+    <a href="{% url 'profiles' %}" class="header__logo" style="flex-shrink: 0; display: flex; align-items: center; transition: transform 0.2s ease;">
+      <img src="{% static 'images/GoodLogo01.png' %}" alt="FarmerSearch Logo" style="height: 4rem; display: block;" />
+    </a>
       <nav class="header__nav">
         <input type="checkbox" id="responsive-menu" />
         <label for="responsive-menu" class="toggle-menu">
@@ -21,15 +22,9 @@
           <li class="header__menuItem">
             <a href="{% url 'products' %}">Products</a>
           </li>
-          
-          {% if request.user.is_authenticated %}
-            <li class="header__menuItem"><a href="{% url 'inbox' %}">Inbox</a></li>
-            <li class="header__menuItem"><a href="{%url 'account' %}" class="btn btn--sub">Account</a></li>
-            <li class="header__menuItem"><a href="{% url 'logout' %}" class="btn btn--sub">Logout</a></li>
-          {% else %}
-            <li class="header__menuItem"><a href="{% url 'login' %}" class="btn btn--sub">Login/Sign Up</a></li>  
-          {% endif %}
-
+          <li class="header__menuItem"><a href="">Inbox</a></li>
+          <li class="header__menuItem"><a href="{%url 'create-product' %}" class="btn btn--sub">Add Product</a></li>
+          <li class="header__menuItem"><a href="" class="btn btn--sub">Login/Sign Up</a></li>          
         </ul>
       </nav>
     </div>
