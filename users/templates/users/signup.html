@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Soko Direct | Sign Up</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+.overlay {
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container {
+    width: 380px;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0,0,0,.3);
+}
+h1 { text-align: center; color: #1c7c54; margin-bottom: 25px; }
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #333;
+}
+select { appearance: auto; background: white; }
+button {
+    width: 100%;
+    padding: 14px;
+    background: #1c7c54;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 5px;
+}
+button:hover { opacity: .9; }
+a { text-decoration: none; color: #1c7c54; }
+.bottom { text-align: center; margin-top: 20px; }
+.error { color: red; font-size: 14px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="overlay">
+    <div class="container">
+        <h1>Sign Up</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="error">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" value="{{ form.username.value|default:'' }}">
+            <select name="role">
+                <option value="">Select Role</option>
+                <option value="buyer" {% if form.role.value == 'buyer' %}selected{% endif %}>Buyer</option>
+                <option value="farmer" {% if form.role.value == 'farmer' %}selected{% endif %}>Farmer</option>
+            </select>
+            <input type="password" name="password1" placeholder="Password">
+            <input type="password" name="password2" placeholder="Confirm Password">
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="bottom">
+            Already have an account?
+            <a href="/users/login/">Login</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
