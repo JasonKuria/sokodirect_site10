@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Our SokoDirect apps:
     'home.apps.HomeConfig',
     'about.apps.AboutConfig',
@@ -45,8 +45,11 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'support.apps.SupportConfig',
     'contact.apps.ContactConfig',
-
+    'farmer.apps.FarmerConfig',  
+    'buyer.apps.BuyerConfig',    
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,3 +133,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
