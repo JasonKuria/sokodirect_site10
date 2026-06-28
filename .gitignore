@@ -1,6 +1,14 @@
+﻿# Python cache
 __pycache__/
 *.pyc
 *.pyo
-envSokoDirect/
+
+# Database (don't commit this)
 db.sqlite3
-.vscode/
+
+# Virtual environment
+envSokoDirect/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,31 +1,106 @@
+<!-- templates/navbar.html -->
+
 {% load static %}
 
-  <!-- Header Section -->
-<header class="header" style="background-color: #113821 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-bottom: 3px solid #1e8a57; padding: 1.2rem 0;">
-  
-    <div class="container container--narrow">
-      <!-- Logo - now goes to user(farmer) profiles (homepage) -->
-    <a href="{% url 'profiles' %}" class="header__logo" style="flex-shrink: 0; display: flex; align-items: center; transition: transform 0.2s ease;">
-      <img src="{% static 'images/GoodLogo01.png' %}" alt="FarmerSearch Logo" style="height: 4rem; display: block;" />
-    </a>
-      <nav class="header__nav">
-        <input type="checkbox" id="responsive-menu" />
-        <label for="responsive-menu" class="toggle-menu">
-          <span>Menu</span>
-          <div class="toggle-menu__lines"></div>
-        </label>
-        <ul class="header__menu">
-          <li class="header__menuItem">
-            <!-- Nav link to user(farmer) profiles -->
-            <a href="{% url 'profiles' %}">Farmers</a>
-          </li>
-          <li class="header__menuItem">
-            <a href="{% url 'products' %}">Products</a>
-          </li>
-          <li class="header__menuItem"><a href="">Inbox</a></li>
-          <li class="header__menuItem"><a href="{%url 'create-product' %}" class="btn btn--sub">Add Product</a></li>
-          <li class="header__menuItem"><a href="" class="btn btn--sub">Login/Sign Up</a></li>          
-        </ul>
-      </nav>
+<header class="header" style="background-color: #113821 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-bottom: 3px solid #1e8a57; padding: 0;">
+    <div style="padding: 1.2rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.15);">
+        <div class="container container--narrow" style="display: flex; align-items: center; justify-content: center; gap: 4rem; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+
+            <!-- Logo -->
+            <a href="{% url 'products' %}" class="header__logo" style="flex-shrink: 0; display: flex; align-items: center; transition: transform 0.2s ease;">
+                <img src="{% static 'images/GoodLogo01.png' %}" alt="FarmerSearch Logo" style="height: 4rem; display: block;" />
+            </a>
+
+            <!-- Search Bar -->
+            <div class="header__search" style="flex-grow: 1; max-width: 460px;">
+                <form id="globalSearchForm" action="{% url 'products' %}" method="get" style="display: flex; background: #ffffff; border-radius: 24px; padding: 3px 4px 3px 8px; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin: 0; border: 1px solid #e2e8f0;">
+                    <input
+                        type="text"
+                        name="search_query"
+                        placeholder="Search for fresh farm produce..."
+                        value="{{ search_query|default:'' }}"
+                        style="flex-grow: 1; border: none !important; padding: 8px 12px !important; font-size: 1.4rem !important; color: #1e293b !important; background: transparent !important; outline: none !important; height: auto !important;"
+                    />
+                    <button type="submit" style="background-color: #f1c40f !important; color: #113821 !important; border: none !important; padding: 0 22px !important; font-size: 1.4rem !important; font-weight: 700 !important; border-radius: 20px !important; cursor: pointer !important; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        Search
+                    </button>
+                </form>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="header__nav" style="flex-shrink: 0;">
+                <input type="checkbox" id="responsive-menu" />
+                <label for="responsive-menu" class="toggle-menu">
+                    <span>Menu</span>
+                    <div class="toggle-menu__lines"></div>
+                </label>
+                <ul class="header__menu" style="display: flex; align-items: center; gap: 3rem; list-style: none; margin: 0; padding: 0;">
+
+                    <!-- Farmers Link -->
+                    <li class="header__menuItem">
+                        <a href="{% url 'profiles' %}" style="color: #f8fafc !important; font-weight: 600; font-size: 1.5rem; text-decoration: none; transition: color 0.2s;">Farmers</a>
+                    </li>
+
+                    <!-- Products Link -->
+                    <li class="header__menuItem">
+                        <a href="{% url 'products' %}" style="color: #f8fafc !important; font-weight: 600; font-size: 1.5rem; text-decoration: none; transition: color 0.2s;">Products</a>
+                    </li>
+
+                    <!-- Authenticated User Links -->
+                    {% if request.user.is_authenticated %}
+                        <li class="header__menuItem">
+                            <a href="#" style="color: #f8fafc !important; font-weight: 600; font-size: 1.5rem; text-decoration: none;">Inbox</a>
+                        </li>
+                       <li class="header__menuItem">
+    {% if request.user.profile.id %}
+        <a href="{% url 'user_profile' request.user.profile.id %}" class="btn" style="background-color: rgba(255,255,255,0.15) !important; color: #ffffff !important; padding: 6px 16px; border-radius: 6px; font-weight: 600; font-size: 1.4rem; border: 1px solid rgba(255,255,255,0.25);">Account</a>
+    {% else %}
+        <a href="#" class="btn" style="background-color: rgba(255,255,255,0.15) !important; color: #ffffff !important; padding: 6px 16px; border-radius: 6px; font-weight: 600; font-size: 1.4rem; border: 1px solid rgba(255,255,255,0.25);">Account</a>
+    {% endif %}
+</li>
+                        <li class="header__menuItem">
+                            <a href="{% url 'logout' %}" class="btn" style="color: #cbd5e1 !important; font-size: 1.4rem; font-weight: 500;">Logout</a>
+                        </li>
+                    {% else %}
+                        <!-- Login/Sign Up Link -->
+                        <li class="header__menuItem">
+                            <a href="{% url 'login' %}" class="btn" style="background-color: #1e8a57 !important; color: white !important; padding: 7px 18px; border-radius: 6px; font-weight: 600; font-size: 1.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Login/Sign Up</a>
+                        </li>
+                    {% endif %}
+
+                    <!-- Shopping Cart -->
+                    <li class="header__menuItem">
+                        <a href="#" style="background: #1e8a57; padding: 7px 16px; border-radius: 20px; position: relative; display: inline-flex; align-items: center; text-decoration: none; color: #fff; font-weight: 600; font-size: 1.4rem; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                            Cart
+                            <span id="cart-total" style="background: #f1c40f; color: #113821; padding: 2px 7px; border-radius: 50%; font-size: 1.1rem; margin-left: 8px; font-weight: 800; line-height: 1;">
+                                {{ cartItems|default:"0" }}
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
     </div>
-  </header>
+
+    <!-- Subheader Bar -->
+    <div class="subheader-bar" style="background-color: #0d2b1a !important; padding: 0.3rem 0; line-height: 1;">
+        <div class="container container--narrow" style="display: flex; align-items: center; justify-content: flex-end; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+
+            <span>
+                <a href="/products/create-product/" class="btn-post-ad-global" style="width: auto; padding: 6px 12px; margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; line-height: 1; color: #f1c40f !important;">
+                    Post an Item / Produce AD
+                </a>
+            </span>
+
+            <span style="color: #f1c40f; padding: 0 10px;">|</span>
+
+            <span>
+                <a href="/userdashboard/" class="btn-post-ad-global" style="width: auto; padding: 6px 12px; margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; line-height: 1; color: #f1c40f !important;">
+                    Farmers/Buyers Dashboard
+                </a>
+            </span>
+
+        </div>
+    </div>
+</header>

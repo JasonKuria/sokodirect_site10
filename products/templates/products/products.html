@@ -1,79 +1,111 @@
+<!-- Products/products.html -->
+
 {% extends 'main.html' %}
 {% block content %}
 
-  <!-- Main Section -->
-  <main class="projects">
-    <section class="hero-section text-center">
-      <div class="container container--narrow">
-        <div class="hero-section__box">
-          <h2 style="color: #3fca3f"  >Search for <span style="color: #3fca3f !important;">Farm Produce</span></h2>
-        </div>
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/products.css' %}" />
 
-        <div class="hero-section__search">
-          <form class="form" action="#" method="get">
-            <div class="form__field">
-              <label for="formInput#search">Search By Farmers Produce </label>
-              <input class="input input--text" id="formInput#search" type="text" name="text"
-                placeholder="Search by Farm Produce Title" />
+<main class="projects">
+    <section class="projectsList" style="margin-top: 1rem;">
+        <div class="content-box">
+
+            <!-- Search Results Header -->
+            {% if search_query %}
+            <div style="margin-bottom: 2rem; font-size: 1.6rem; color: #475569;">
+                Showing search results for: <strong>"{{ search_query }}"</strong>
+                <a href="{% url 'products' %}" style="margin-left: 10px; color: #1c5235; text-decoration: underline; font-size: 1.4rem;">
+                    Clear Filter
+                </a>
             </div>
+            {% endif %}
 
-            <input class="btn btn--sub btn--lg" type="submit" value="Search" />
-          </form>
-        </div>
-      </div>
-    </section>
+            <!-- Product Grid -->
+            <div class="marketplace-grid">
 
-    <!-- Search Result: DevList -->
-    <section class="projectsList">
-      <div class="container">
-        <div class="grid grid--three">
+                {% for product in products %}
+                <div class="product-retail-card">
 
-          {% for product in products %}
-
-          <div class="column">
-            <div class="card project">
-              <a href="{% url 'single-product' product.id %}" class="project">
-                <img class="project__thumbnail" src="{{ product.featured_image.url }}" alt="product thumbnail" />
-                <div class="card__body">
-                  <h3 class="project__title">{{ product.title }}</h3>
-
-
-                  <!-- Real user(farmer) name — queries up from product to its owner profile -->
-                  <!-- product.owner = the Profile, product.owner.name = user(farmer's) name -->
-                  <p>
-                    <a class="project__author" href="">
-                      By {{product.owner.name}}
+                    <!-- Product Image -->
+                    <a href="{% url 'single-product' product.id %}" class="product-img-link">
+                        <img class="product-img-render" src="{{ product.imageURL }}" alt="{{ product.title }} thumbnail" />
                     </a>
-                  </p>
 
-                  <p class="project--rating">
-                    <span style="font-weight: bold;">{{ product.vote_ratio }}% </span> Postitive Feedback 
-                    ({{product.vote_total}}) Vote{{product.vote_total|pluralize:"s"}}
-                  </p>
+                    <!-- Product Details -->
+                    <div class="product-details-box">
+                        <a href="{% url 'single-product' product.id %}" style="text-decoration: none; color: inherit; display: block; margin: 0 !important; padding: 0 !important;">
+                            <h3 class="retail-title" title="{{ product.title }}" style="margin: 0 !important; line-height: 1.2 !important; height: auto !important; max-height: 3.6rem; overflow: hidden;">
+                                {{ product.title }}
+                            </h3>
+                        </a>
 
-                  <div class="project__tags">
-                    <!-- Categories (ManyToMany) -->
-                    {% for category in product.categories.all %}
-                    <span class="tag tag--pill tag--main">
-                      <small>{{ category.name }}</small>
-                    </span>
-                    {% endfor %}
-                  </div>
+                        <p class="retail-farmer" style="margin: 0 !important; padding: 0 !important; line-height: 1.2 !important;">
+                            Farmer: <strong>{{ product.owner.name }}</strong>
+                        </p>
+
+                        <!-- Location Badge -->
+                        <div class="retail-location-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span>{{ product.county|default:"Nairobi" }}</span>
+                        </div>
+
+                        <!-- Rating Badge -->
+                        {% if product.vote_ratio %}
+                        <div class="trust-rating-badge">
+                            👍 {{ product.vote_ratio }}% Positive
+                        </div>
+                        {% else %}
+                        <div class="trust-rating-badge" style="background-color: #f1f5f9; color: #64748b;">
+                            New Product
+                        </div>
+                        {% endif %}
+
+                        <!-- Category Tags -->
+                        <div class="retail-tag-strip">
+                            {% for category in product.categories.all %}
+                            <span class="retail-mini-pill">{{ category.name }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Add to Cart (Commented Out) -->
+                        <!--
+                        <div class="retail-action-footer">
+                            <p class="retail-price-display">
+                                <span>KES</span> {{ product.price }}
+                            </p>
+                            <button
+                                data-product="{{ product.id }}"
+                                data-action="add"
+                                class="ecommerce-add-btn update-cart">
+                                🛒 Add To Cart
+                            </button>
+                        </div>
+                        -->
+
+                    </div>
 
                 </div>
-              </a>
-            </div>
-          </div>
-          
-          {% endfor %}
+                {% empty %}
+                <!-- Empty State -->
+                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 0; color: #64748b;">
+                    <p style="font-size: 1.8rem; font-weight: 600;">
+                        No farm produce found matching your parameters.
+                    </p>
+                    <a href="{% url 'products' %}" style="color: #1c5235; font-weight: bold; text-decoration: underline;">
+                        Clear Search filters
+                    </a>
+                </div>
+                {% endfor %}
 
+            </div>
         </div>
-      </div>
     </section>
 
-
-  </main>
-
-
+    <!-- Pagination -->
+    {% include 'pagination.html' with queryset=products custom_range=custom_range %}
+</main>
 
 {% endblock content %}
